@@ -1,0 +1,43 @@
+<%- include("partials/header") -%>
+<div class="wrapper-header">
+<h1>User Posts</h1>
+<a href="/" class="back-to-home">Back to Home</a>
+</div>
+<h2>All Posts</h2>
+<div id="editFormContainer" style="display: none">
+  <h3>Edit Post</h3>
+  <form id="editForm" action="/" method="POST">
+    <textarea id="editTextarea" name="newPost" required></textarea>
+    <input type="hidden" name="postIndex" id="postIndex" />
+    <button class="btnSave" type="submit" id="saveButton">Save Changes</button>
+  </form>
+</div>
+
+<ul class="post-list">
+  <% userPost.forEach(function(post, index) { %>
+  <li class="post-item">
+    <p class="content-post" id="postText-<%= index %>"><%= post.text %></p>
+    <small><%= post.timestamp %></small>
+
+    <!-- Edit and Delete buttons -->
+    <div class="editdelete-end">
+      <!-- Delete button -->
+      <form action="/delete/<%= index %>" method="POST" style="display: inline">
+        <button type="submit">Delete</button>
+      </form>
+
+      <!-- Edit button -->
+      <button
+        onclick="loadEditForm('<%= JSON.stringify(post.text) %>', '<%= index %>')"
+      >
+        Edit
+      </button>
+    </div>
+  </li>
+  <% }); %>
+</ul>
+
+<!-- Edit Post Form - Hidden until an edit button is clicked -->
+
+<%- include("partials/footer") -%>
+

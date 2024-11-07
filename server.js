@@ -10,28 +10,37 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+// Render home page with all posts
 app.get("/", function (req, res) {
   res.render("home", { userPost: posts });
 });
 
+// Render post page with all posts
+app.get("/post", function (req, res) {
+  res.render("post", { userPost: posts });
+});
+
+// Add a new post
 app.post("/", function (req, res) {
   const newPostText = req.body.newPost;
   const newPost = { text: newPostText, timestamp: date.getFormattedDate() };
   posts.push(newPost);
-  res.redirect("/");
+  res.redirect("/post");
 });
 
+// Delete a post
 app.post("/delete/:index", function (req, res) {
   const index = req.params.index;
-  posts.splice(index, 1); // Remove the post at the specified index
-  res.redirect("/");
+  posts.splice(index, 1);
+  res.redirect("/post");
 });
 
+// Update an existing post
 app.post("/update/:index", function (req, res) {
   const index = req.params.index;
-  const updatedText = req.body.newPost; // This should match the name of the textarea
-  posts[index].text = updatedText; // Update the post text
-  res.redirect("/"); // Redirect back to the home page
+  const updatedText = req.body.newPost;
+  posts[index].text = updatedText;
+  res.redirect("/post");
 });
 
 app.listen(PORT, () => {
